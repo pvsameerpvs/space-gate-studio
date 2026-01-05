@@ -8,20 +8,20 @@ export function CinematicBackground() {
     <div className="fixed inset-0 pointer-events-none -z-10 bg-[#03040B]">
       {/* Base Gradient */}
       {/* Base Cinematic Video */}
-      <div className="absolute inset-0 mix-blend-screen opacity-60">
+      <div className="absolute inset-0 opacity-100">
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover opacity-80"
         >
           <source src="/images/hero-vid.mp4" type="video/mp4" />
         </video>
       </div>
       
-      {/* Overlay Gradient for depth */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#03040B] via-[#03040B]/80 to-[#03040B]" />
+      {/* Overlay Gradient for depth - reduced opacity */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#03040B]/80 via-[#03040B]/40 to-[#03040B]" />
 
       {/* Moving Stars / Dust */}
       <motion.div
