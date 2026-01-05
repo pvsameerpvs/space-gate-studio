@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+  color-scheme: dark;
+  --cursor-x: 50vw;
+  --cursor-y: 50vh;
+}
+
+html, body {
+  height: 100%;
+}
+
+body{
+  background: radial-gradient(1200px 800px at 20% 10%, rgba(88,231,255,0.16), transparent 55%),
+              radial-gradient(900px 700px at 80% 30%, rgba(170,80,255,0.14), transparent 55%),
+              radial-gradient(900px 700px at 55% 85%, rgba(0,255,209,0.10), transparent 55%),
+              hsl(230 35% 5%);
+  overflow-x: hidden;
+}
+
+::selection{
+  background: rgba(88,231,255,0.25);
+}
+
+a{
+  @apply outline-none;
+}
+
+/* Subtle animated grid + noise */
+.bg-grid::before{
+  content:"";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(60% 60% at 50% 30%, black 40%, transparent 72%);
+  opacity: 0.55;
+  pointer-events: none;
+  transform: translateZ(0);
+}
+
+.bg-grid::after{
+  content:"";
+  position:absolute;
+  inset:-20%;
+  background: radial-gradient(circle at var(--cursor-x) var(--cursor-y), rgba(88,231,255,0.10), transparent 32%);
+  filter: blur(20px);
+  opacity: 0.9;
+  pointer-events:none;
+}
+
+.noise{
+  position: absolute;
+  inset: 0;
+  background-image: url("/noise.png");
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.scanline{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+.scanline::before{
+  content:"";
+  position:absolute;
+  left:-10%;
+  right:-10%;
+  top:-60%;
+  height: 40%;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.06), transparent);
+  animation: scan 4.5s linear infinite;
+}
+
+/* Custom cursor */
+.cursor-dot{
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(88,231,255,0.9);
+  box-shadow: 0 0 20px rgba(88,231,255,0.35);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: screen;
+}
+.cursor-ring{
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(170,80,255,0.55);
+  box-shadow: 0 0 30px rgba(170,80,255,0.18);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9998;
+  backdrop-filter: blur(6px);
+}
+
