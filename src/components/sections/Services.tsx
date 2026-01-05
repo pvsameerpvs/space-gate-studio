@@ -29,8 +29,17 @@ export function Services() {
   const { play } = useSound();
 
   return (
-    <section id="services" className="relative py-20">
-      <div className="mx-auto max-w-6xl px-4">
+    <section id="services" className="relative py-20 overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none mix-blend-screen">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url(/images/tech-bg.png)" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#03040B] via-transparent to-[#03040B]" />
+      </div>
+
+      <div className="mx-auto max-w-6xl px-4 relative z-10">
         <Reveal>
           <div className="font-mono text-xs tracking-[0.35em] text-white/60">SERVICES</div>
           <h2 className="mt-3 font-brand text-4xl sm:text-5xl">Full-stack. Full-cinematic.</h2>

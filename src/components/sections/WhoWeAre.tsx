@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { Reveal } from "@/components/motion/Reveal";
 import { Card, CardContent } from "@/components/ui/card";
 import { useSound } from "@/components/sound/SoundProvider";
+import { motion } from "framer-motion";
 
 export function WhoWeAre() {
   const { play } = useSound();
@@ -13,18 +14,34 @@ export function WhoWeAre() {
     <section id="who" className="relative py-20">
       <div className="mx-auto max-w-6xl px-4">
         <Reveal>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Text Content */}
             <div>
               <div className="font-mono text-xs tracking-[0.35em] text-white/60">WHO WE ARE</div>
               <h2 className="mt-3 font-brand text-4xl sm:text-5xl">An AI-driven studio in Dubai.</h2>
-              <p className="mt-4 max-w-2xl font-ui text-white/75">
+              <p className="mt-4 text-lg font-ui text-white/75 leading-relaxed">
                 We build products that feel alive. Think: space UI, cinematic motion, tactile feedback,
                 and AI-native experiences that users want to share.
               </p>
+              <div className="mt-6 font-mono text-xs text-neon-cyan">
+                latency: low • polish: high • ambition: orbital
+              </div>
             </div>
-            <div className="font-mono text-xs text-white/60">
-              latency: low • polish: high • ambition: orbital
-            </div>
+
+            {/* Image Content */}
+            <motion.div 
+              className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl skew-y-1"
+              whileHover={{ scale: 1.02, skewY: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              <div className="absolute inset-0 bg-neon-blue/20 mix-blend-overlay z-10" />
+              <img 
+                src="/images/ai-lab.png" 
+                alt="Space Gate AI Lab" 
+                className="w-full h-auto object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#050612] via-transparent to-transparent opacity-60 z-20" />
+            </motion.div>
           </div>
         </Reveal>
 
