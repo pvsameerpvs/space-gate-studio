@@ -6,6 +6,7 @@ import { LenisProvider } from "@/components/motion/LenisProvider";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { TopNav } from "@/components/nav/TopNav";
 import { CinematicCursor } from "@/components/fx/CinematicCursor";
+import { CinematicBackground } from "@/components/ui/CinematicBackground";
 import { LoadingGate } from "@/components/fx/LoadingGate";
 
 export const metadata: Metadata = {
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <LenisProvider>
             <LoadingGate />
             <TopNav />
+            <CinematicBackground />
             <CinematicCursor />
             <div className="pt-2">
               <PageTransition>{children}</PageTransition>

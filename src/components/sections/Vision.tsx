@@ -2,6 +2,7 @@
 
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { Reveal } from "@/components/motion/Reveal";
 import { useSound } from "@/components/sound/SoundProvider";
 
 export function Vision() {
@@ -31,14 +32,32 @@ export function Vision() {
 
       <div className="relative z-10 max-w-4xl px-4 text-center">
         <motion.div style={{ opacity }}>
-          <div className="font-mono text-xs tracking-[0.5em] text-neon-cyan mb-6">VISION</div>
-          <h2 className="font-brand text-5xl md:text-7xl lg:text-8xl leading-none bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent">
-            Open The Gate
-          </h2>
-          <p className="mt-8 text-lg md:text-xl font-play text-white/80 max-w-2xl mx-auto leading-relaxed">
-            We envision a future where digital interfaces are indistinguishable from magic.
-            Where every interaction tells a story, and every click feels like a launch sequence.
-          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <Reveal variant="slide-right">
+            <h2 className="font-brand text-5xl md:text-7xl leading-none text-white">
+              FUTURE <br/> 
+              <span className="text-neon-purple">READY</span>
+            </h2>
+          </Reveal>
+          
+          <div className="space-y-8">
+            <Reveal variant="fly-in" delay={0.2}>
+              <p className="font-ui text-lg text-white/70 leading-relaxed">
+                We believe in a web that feels less like a document and more like a destination.
+                Spatial computing. Generative interfaces. We are building the terminals of tomorrow.
+              </p>
+            </Reveal>
+            <Reveal variant="fly-in" delay={0.4}>
+              <div className="flex gap-4">
+                {["WebGL", "WebGPU", "React 19"].map(tag => (
+                  <div key={tag} className="px-4 py-2 rounded-full border border-white/10 bg-white/5 font-mono text-xs text-white/60">
+                    {tag}
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </div>
         </motion.div>
       </div>
 

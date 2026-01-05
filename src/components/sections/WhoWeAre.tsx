@@ -13,7 +13,7 @@ export function WhoWeAre() {
   return (
     <section id="who" className="relative py-20">
       <div className="mx-auto max-w-6xl px-4">
-        <Reveal>
+        <Reveal variant="fly-in">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Text Content */}
             <div>
@@ -51,7 +51,7 @@ export function WhoWeAre() {
             { t: "AI-native", d: "We design flows around automation, personalization, and intelligence." },
             { t: "Built to ship", d: "Fast, scalable, production-ready code with performance discipline." }
           ].map((x, i) => (
-            <Reveal key={x.t} delay={0.08 * i}>
+            <Reveal key={x.t} delay={0.08 * i} variant="fly-in">
               <Card
                 className="group hover:border-white/20 transition"
                 onMouseEnter={() => play("hover")}

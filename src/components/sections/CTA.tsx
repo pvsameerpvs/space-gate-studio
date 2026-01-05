@@ -20,7 +20,7 @@ export function CTA() {
       </div>
 
       <div className="mx-auto max-w-6xl px-4">
-        <Reveal>
+        <Reveal variant="scale-up">
           <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl p-10 shadow-glow overflow-hidden relative">
             <div className="absolute -inset-20 opacity-60 bg-[conic-gradient(from_180deg_at_50%_50%,rgba(88,231,255,0.18),rgba(170,80,255,0.18),rgba(0,255,209,0.14),rgba(88,231,255,0.18))] blur-3xl" />
             <div className="relative">
