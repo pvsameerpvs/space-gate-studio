@@ -53,24 +53,54 @@ export function WhoWeAre() {
             </Reveal>
           </div>
 
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { t: "Experience-first", d: "Every pixel is intentional. Every interaction has feedback." },
-            { t: "AI-native", d: "We design flows around automation, personalization, and intelligence." },
-            { t: "Built to ship", d: "Fast, scalable, production-ready code with performance discipline." }
+            { 
+              t: "Experience-first", 
+              d: "Every pixel is intentional. Every interaction has feedback.",
+              color: "from-cyan-400 to-blue-500",
+              border: "group-hover:border-cyan-400/50",
+              shadow: "group-hover:shadow-[0_0_30px_rgba(34,211,238,0.3)]"
+            },
+            { 
+              t: "AI-native", 
+              d: "We design flows around automation, personalization, and intelligence.",
+              color: "from-purple-400 to-pink-500",
+              border: "group-hover:border-purple-400/50",
+              shadow: "group-hover:shadow-[0_0_30px_rgba(192,132,252,0.3)]"
+            },
+            { 
+              t: "Built to ship", 
+              d: "Fast, scalable, production-ready code with performance discipline.",
+              color: "from-amber-300 to-orange-500",
+              border: "group-hover:border-amber-400/50",
+              shadow: "group-hover:shadow-[0_0_30px_rgba(251,191,36,0.3)]"
+            }
           ].map((x, i) => (
-            <Reveal key={x.t} delay={0.08 * i} variant="fly-in">
-              <Card
-                className="group hover:border-white/20 transition"
-                onMouseEnter={() => play("hover")}
-                onClick={() => play("click")}
+            <Reveal key={x.t} delay={0.1 * i} variant="scale-up" className="h-full">
+              <motion.div
+                className={`group relative h-full rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all duration-500 ${x.border} ${x.shadow}`}
+                whileHover={{ 
+                  y: -10,
+                  rotateX: 5,
+                  rotateY: 5,
+                  scale: 1.05,
+                  transition: { duration: 0.2 } 
+                }}
+                style={{ perspective: 1000 }}
               >
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-[radial-gradient(circle_at_20%_20%,rgba(88,231,255,0.18),transparent_55%)]" />
-                <CardContent className="relative">
-                  <div className="font-brand text-2xl">{x.t}</div>
-                  <div className="mt-2 font-ui text-white/70">{x.d}</div>
-                </CardContent>
-              </Card>
+                {/* Holographic Gradient Overlay */}
+                <div className={`absolute inset-0 opacity-0 group-hover:opacity-20 transition duration-500 bg-gradient-to-br ${x.color} rounded-2xl`} />
+                
+                {/* Content */}
+                <div className="relative z-10">
+                  <div className={`mb-4 w-12 h-1 bg-gradient-to-r ${x.color} rounded-full`} />
+                  <h3 className="text-2xl font-brand text-white md:text-3xl">{x.t}</h3>
+                  <p className="mt-4 text-sm font-ui text-white/60 leading-relaxed">
+                    {x.d}
+                  </p>
+                </div>
+              </motion.div>
             </Reveal>
           ))}
         </div>
