@@ -8,7 +8,7 @@ import { Ripple } from "@/components/fx/Ripple";
 import { useSound } from "@/components/sound/SoundProvider";
 
 const links = [
-  { id: "who", label: "Who We Are" },
+  { id: "who-we-are", label: "Who We Are" },
   { id: "different", label: "Different" },
   { id: "services", label: "Services" },
   { id: "process", label: "Process" },
@@ -34,7 +34,7 @@ export function TopNav() {
           {links.map((l) => (
             <a
               key={l.id}
-              href={`#${l.id}`}
+              href={`/${l.id}`}
               className="rounded-full px-3 py-2 text-sm text-white/70 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 transition"
               onMouseEnter={() => play("hover")}
               onClick={() => play("click")}

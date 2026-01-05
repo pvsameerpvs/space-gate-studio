@@ -1,83 +1,49 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { Reveal } from "@/components/motion/Reveal";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
+import React, { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useSound } from "@/components/sound/SoundProvider";
 
-gsap.registerPlugin(ScrollTrigger);
-
 export function Vision() {
-  const ref = useRef<HTMLDivElement | null>(null);
   const { play } = useSound();
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
 
-  useEffect(() => {
-    if (!ref.current) return;
-    const el = ref.current;
-
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        el.querySelectorAll("[data-glow]"),
-        { y: 22, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.12,
-          duration: 1.1,
-          scrollTrigger: { trigger: el, start: "top 70%" }
-        }
-      );
-
-      gsap.to(el.querySelector("[data-bg]"), {
-        yPercent: 10,
-        ease: "none",
-        scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true }
-      });
-    });
-
-    return () => ctx.revert();
-  }, []);
+  const y = useTransform(scrollYProgress, [0, 1], ["-20%", "20%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   return (
-    <section id="vision" className="relative py-24 overflow-hidden">
-      <div data-bg className="absolute inset-0 -z-10 opacity-80">
-        <div className="absolute inset-0 bg-[radial-gradient(900px_600px_at_20%_20%,rgba(88,231,255,0.16),transparent_60%),radial-gradient(900px_600px_at_80%_30%,rgba(170,80,255,0.14),transparent_60%),radial-gradient(900px_600px_at_45%_80%,rgba(0,255,209,0.10),transparent_60%)]" />
-        <div className="absolute inset-0 bg-grid" />
-        <div className="noise" />
+    <section id="vision" ref={ref} className="relative h-[80vh] flex items-center justify-center overflow-hidden">
+      {/* Parallax Background */}
+      <motion.div 
+        style={{ y }}
+        className="absolute inset-0 z-0"
+      >
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url(/images/space-gate.png)" }}
+        />
+        <div className="absolute inset-0 bg-black/60" />
+      </motion.div>
+
+      <div className="relative z-10 max-w-4xl px-4 text-center">
+        <motion.div style={{ opacity }}>
+          <div className="font-mono text-xs tracking-[0.5em] text-neon-cyan mb-6">VISION</div>
+          <h2 className="font-brand text-5xl md:text-7xl lg:text-8xl leading-none bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent">
+            Open The Gate
+          </h2>
+          <p className="mt-8 text-lg md:text-xl font-play text-white/80 max-w-2xl mx-auto leading-relaxed">
+            We envision a future where digital interfaces are indistinguishable from magic.
+            Where every interaction tells a story, and every click feels like a launch sequence.
+          </p>
+        </motion.div>
       </div>
 
-      <div ref={ref} className="mx-auto max-w-6xl px-4">
-        <Reveal>
-          <div className="font-mono text-xs tracking-[0.35em] text-white/60">VISION</div>
-        </Reveal>
-
-        <h2 data-glow className="mt-4 font-brand text-5xl sm:text-6xl leading-[1.04]">
-          <span className="text-white">Cinematic products.</span>{" "}
-          <span className="bg-gradient-to-r from-neon-cyan via-neon-blue to-neon-purple bg-clip-text text-transparent">
-            Investor-grade polish.
-          </span>
-        </h2>
-
-        <p data-glow className="mt-6 max-w-3xl font-ui text-xl text-white/75">
-          Space Gate Studio is building the next generation of digital presence—where motion, sound,
-          interaction, and intelligence converge into a shareable experience.
-        </p>
-
-        <div data-glow className="mt-10 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl p-7 shadow-glow">
-          <div className="font-mono text-xs text-white/60">slow scroll • glow text • cinematic pacing</div>
-          <div className="mt-3 font-ui text-white/75">
-            The future isn’t flat. It moves. It responds. It invites users to play.
-          </div>
-          <button
-            className="mt-6 rounded-full border border-white/10 bg-white/5 px-4 py-2 font-mono text-xs text-white/70 hover:text-white hover:bg-white/10 transition"
-            onMouseEnter={() => play("hover")}
-            onClick={() => play("click")}
-          >
-            Engage Sequence
-          </button>
-        </div>
-      </div>
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#03040B] to-transparent z-20" />
+      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#03040B] to-transparent z-20" />
     </section>
   );
 }

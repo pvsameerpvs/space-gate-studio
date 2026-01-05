@@ -32,24 +32,32 @@ export function Different() {
             return (
               <Reveal key={it.title} delay={0.06 * i}>
                 <motion.div
-                  whileHover={{ y: -8, rotateX: 6, rotateY: -6, scale: 1.01 }}
+                  whileHover={{ y: -8, scale: 1.02 }}
                   transition={{ type: "spring", stiffness: 220, damping: 18 }}
                   className="h-full"
                   onMouseEnter={() => play("hover")}
                   onClick={() => play("click")}
                 >
-                  <Card className="group h-full">
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-[radial-gradient(circle_at_30%_20%,rgba(170,80,255,0.18),transparent_55%)]" />
-                    <CardContent className="relative">
-                      <div className="flex items-center gap-3">
-                        <div className="rounded-2xl border border-white/10 bg-white/5 p-3 shadow-[0_0_30px_rgba(88,231,255,0.12)]">
-                          <Icon className="h-5 w-5 text-white" />
-                        </div>
-                        <div className="font-brand text-xl">{it.title}</div>
+                  <Card className="group h-full overflow-hidden border-white/10 bg-white/5 backdrop-blur-sm">
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 bg-[radial-gradient(circle_at_30%_20%,rgba(170,80,255,0.15),transparent_60%)]" />
+                    <CardContent className="relative p-6">
+                      <div className="flex items-center gap-4">
+                        <motion.div 
+                          className="rounded-2xl border border-white/10 bg-white/5 p-3 shadow-[0_0_30px_rgba(88,231,255,0.1)]"
+                          whileHover={{ rotate: 15, scale: 1.1, backgroundColor: "rgba(255,255,255,0.1)" }}
+                        >
+                          <Icon className="h-6 w-6 text-neon-cyan" />
+                        </motion.div>
+                        <div className="font-brand text-xl text-white/90">{it.title}</div>
                       </div>
-                      <div className="mt-3 font-ui text-white/70">{it.desc}</div>
-                      <div className="mt-6 h-[1px] w-full bg-gradient-to-r from-transparent via-white/15 to-transparent" />
-                      <div className="mt-4 font-mono text-xs text-white/55">hover: glow • lift • tilt</div>
+                      <div className="mt-4 font-ui text-white/70 leading-relaxed">{it.desc}</div>
+                      
+                      <motion.div 
+                        className="mt-6 h-[1px] w-full bg-gradient-to-r from-transparent via-white/20 to-transparent" 
+                        initial={{ scaleX: 0.5, opacity: 0.5 }}
+                        whileInView={{ scaleX: 1, opacity: 1 }}
+                        transition={{ duration: 1.5 }}
+                      />
                     </CardContent>
                   </Card>
                 </motion.div>
