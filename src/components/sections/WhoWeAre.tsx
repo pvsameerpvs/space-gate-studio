@@ -13,37 +13,45 @@ export function WhoWeAre() {
   return (
     <section id="who" className="relative py-20">
       <div className="mx-auto max-w-6xl px-4">
-        <Reveal variant="fly-in">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Text Content */}
             <div>
-              <div className="font-mono text-xs tracking-[0.35em] text-white/60">WHO WE ARE</div>
-              <h2 className="mt-3 font-brand text-4xl sm:text-5xl">An AI-driven studio in Dubai.</h2>
-              <p className="mt-4 text-lg font-ui text-white/75 leading-relaxed">
-                We build products that feel alive. Think: space UI, cinematic motion, tactile feedback,
-                and AI-native experiences that users want to share.
-              </p>
-              <div className="mt-6 font-mono text-xs text-neon-cyan">
-                latency: low • polish: high • ambition: orbital
-              </div>
+              <Reveal>
+                <div className="font-mono text-xs tracking-[0.35em] text-white/60">WHO WE ARE</div>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <h2 className="mt-3 font-brand text-4xl sm:text-5xl">An AI-driven studio in Dubai.</h2>
+              </Reveal>
+              <Reveal delay={0.2}>
+                <p className="mt-4 text-lg font-ui text-white/75 leading-relaxed">
+                  We build products that feel alive. Think: space UI, cinematic motion, tactile feedback,
+                  and AI-native experiences that users want to share.
+                </p>
+              </Reveal>
+              <Reveal delay={0.3}>
+                <div className="mt-6 font-mono text-xs text-neon-cyan">
+                  latency: low • polish: high • ambition: orbital
+                </div>
+              </Reveal>
             </div>
 
             {/* Image Content */}
-            <motion.div 
-              className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl skew-y-1"
-              whileHover={{ scale: 1.02, skewY: 0 }}
-              transition={{ duration: 0.4 }}
-            >
-              <div className="absolute inset-0 bg-neon-blue/20 mix-blend-overlay z-10" />
-              <img 
-                src="/images/ai-lab.png" 
-                alt="Space Gate AI Lab" 
-                className="w-full h-auto object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#050612] via-transparent to-transparent opacity-60 z-20" />
-            </motion.div>
+            <Reveal variant="scale-up" delay={0.2}>
+              <motion.div 
+                className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl skew-y-1"
+                whileHover={{ scale: 1.02, skewY: 0 }}
+                transition={{ duration: 0.4 }}
+              >
+                <div className="absolute inset-0 bg-neon-blue/20 mix-blend-overlay z-10" />
+                <img 
+                  src="/images/ai-lab.png" 
+                  alt="Space Gate AI Lab" 
+                  className="w-full h-auto object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050612] via-transparent to-transparent opacity-60 z-20" />
+              </motion.div>
+            </Reveal>
           </div>
-        </Reveal>
 
         <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
