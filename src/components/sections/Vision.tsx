@@ -31,9 +31,8 @@ export function Vision() {
       </motion.div>
 
       <div className="relative z-10 max-w-4xl px-4 text-center">
-        <motion.div style={{ opacity }}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <Reveal variant="slide-right">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+          <Reveal>
             <h2 className="font-brand text-5xl md:text-7xl leading-none text-white">
               FUTURE <br/> 
               <span className="text-neon-purple">READY</span>
@@ -41,13 +40,13 @@ export function Vision() {
           </Reveal>
           
           <div className="space-y-8">
-            <Reveal variant="fly-in" delay={0.2}>
+            <Reveal delay={0.2}>
               <p className="font-ui text-lg text-white/70 leading-relaxed">
                 We believe in a web that feels less like a document and more like a destination.
                 Spatial computing. Generative interfaces. We are building the terminals of tomorrow.
               </p>
             </Reveal>
-            <Reveal variant="fly-in" delay={0.4}>
+            <Reveal delay={0.4}>
               <div className="flex gap-4">
                 {["WebGL", "WebGPU", "React 19"].map(tag => (
                   <div key={tag} className="px-4 py-2 rounded-full border border-white/10 bg-white/5 font-mono text-xs text-white/60">
@@ -58,7 +57,6 @@ export function Vision() {
             </Reveal>
           </div>
         </div>
-        </motion.div>
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#03040B] to-transparent z-20" />

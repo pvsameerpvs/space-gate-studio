@@ -65,32 +65,58 @@ export function Process() {
 
           {steps.map((s, i) => (
             <React.Fragment key={s.title}>
-              <div className={i % 2 === 0 ? "" : "md:col-start-3"}>
-                <Reveal delay={0.05 * i}>
-                  <Card
-                    className="group hover:border-neon-cyan/50 transition-colors duration-500"
-                    onMouseEnter={() => play("hover")}
-                    onClick={() => play("click")}
-                  >
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-[radial-gradient(circle_at_30%_20%,rgba(0,255,209,0.14),transparent_60%)]" />
-                    <CardContent className="relative">
-                      <div className="flex items-center gap-3">
-                        <div className="h-8 w-8 rounded-full border border-white/10 bg-white/5 flex items-center justify-center font-mono text-xs text-white/70 group-hover:text-neon-cyan group-hover:border-neon-cyan transition-colors">
-                          {String(i + 1).padStart(2, "0")}
+              {/* Left Column */}
+              <div className={`${i % 2 === 0 ? "block" : "hidden md:block"}`}>
+                {i % 2 === 0 && (
+                  <Reveal delay={0.05 * i}>
+                    <Card
+                      className="group hover:border-neon-cyan/50 transition-colors duration-500"
+                      onMouseEnter={() => play("hover")}
+                      onClick={() => play("click")}
+                    >
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-[radial-gradient(circle_at_30%_20%,rgba(0,255,209,0.14),transparent_60%)]" />
+                      <CardContent className="relative">
+                        <div className="flex items-center gap-3">
+                          <div className="h-8 w-8 rounded-full border border-white/10 bg-white/5 flex items-center justify-center font-mono text-xs text-white/70 group-hover:text-neon-cyan group-hover:border-neon-cyan transition-colors">
+                            {String(i + 1).padStart(2, "0")}
+                          </div>
+                          <div className="font-brand text-2xl group-hover:text-neon-cyan transition-colors">{s.title}</div>
                         </div>
-                        <div className="font-brand text-2xl group-hover:text-neon-cyan transition-colors">{s.title}</div>
-                      </div>
-                      <div className="mt-2 font-ui text-white/70">{s.desc}</div>
-                    </CardContent>
-                  </Card>
-                </Reveal>
+                        <div className="mt-2 font-ui text-white/70">{s.desc}</div>
+                      </CardContent>
+                    </Card>
+                  </Reveal>
+                )}
               </div>
 
+              {/* Center Line/Dot */}
               <div className="relative hidden md:flex items-start justify-center">
                 <div className="mt-5 h-4 w-4 rounded-full bg-neon-cyan shadow-[0_0_30px_rgba(0,255,209,0.8)] z-10 animate-pulse" />
               </div>
 
-              <div className={i % 2 === 0 ? "md:col-start-3" : ""} />
+              {/* Right Column */}
+              <div className={`${i % 2 !== 0 ? "block" : "hidden md:block"}`}>
+                {i % 2 !== 0 && (
+                  <Reveal delay={0.05 * i}>
+                    <Card
+                      className="group hover:border-neon-cyan/50 transition-colors duration-500"
+                      onMouseEnter={() => play("hover")}
+                      onClick={() => play("click")}
+                    >
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-[radial-gradient(circle_at_30%_20%,rgba(0,255,209,0.14),transparent_60%)]" />
+                      <CardContent className="relative">
+                        <div className="flex items-center gap-3">
+                          <div className="h-8 w-8 rounded-full border border-white/10 bg-white/5 flex items-center justify-center font-mono text-xs text-white/70 group-hover:text-neon-cyan group-hover:border-neon-cyan transition-colors">
+                            {String(i + 1).padStart(2, "0")}
+                          </div>
+                          <div className="font-brand text-2xl group-hover:text-neon-cyan transition-colors">{s.title}</div>
+                        </div>
+                        <div className="mt-2 font-ui text-white/70">{s.desc}</div>
+                      </CardContent>
+                    </Card>
+                  </Reveal>
+                )}
+              </div>
             </React.Fragment>
           ))}
         </div>
