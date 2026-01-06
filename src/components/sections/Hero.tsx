@@ -44,7 +44,7 @@ export function Hero() {
             <GravityText 
               text="REALITIES" 
               delay={0.6}
-              className="text-neon-cyan drop-shadow-[0_0_20px_rgba(0,255,209,0.6)]"
+              className="opacity-0 select-none pointer-events-none"
             />
           </h1>
         </Reveal>

@@ -1,9 +1,46 @@
 "use client";
 
-import React, { useRef, useMemo } from "react";
+import React, { useRef, useMemo, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Stars, PerspectiveCamera, Float } from "@react-three/drei";
+import { Stars, PerspectiveCamera, Float, Text } from "@react-three/drei";
 import * as THREE from "three";
+
+function HeroText3D() {
+  const textRef = useRef<THREE.Mesh>(null);
+  
+  useFrame(({ clock }) => {
+    if (!textRef.current) return;
+    
+    // Scroll Physics: Fall down when scrolling
+    const scrollY = window.scrollY;
+    // Base position is slightly below center to match HTML layout
+    // Fall multiplier: 0.015 makes it drop faster than normal scroll
+    textRef.current.position.y = -0.8 - (scrollY * 0.015);
+    
+    // Subtle hover while static
+    textRef.current.position.z = 2 + Math.sin(clock.getElapsedTime()) * 0.2;
+  });
+
+  return (
+    <Text
+      ref={textRef}
+      fontSize={2.5}
+      letterSpacing={0.1}
+      position={[0, -0.8, 2]}
+      anchorX="center"
+      anchorY="middle"
+      characters="REALITIES"
+    >
+      REALITIES
+      <meshStandardMaterial
+        color="#00ffd1"
+        emissive="#00ffd1"
+        emissiveIntensity={3}
+        toneMapped={false}
+      />
+    </Text>
+  );
+}
 
 function ParticleSphere() {
   const points = useRef<THREE.Points>(null);
@@ -71,6 +108,7 @@ function ParticleSphere() {
         size={0.06}
         color="#aa50ff"
         transparent
+        depthWrite={false}
         opacity={0.8}
         sizeAttenuation
         blending={THREE.AdditiveBlending}
@@ -127,6 +165,11 @@ export function SpaceScene() {
         
         {/* Main Fluid Sphere */}
         <ParticleSphere />
+        
+        {/* 3D Falling Text - Suspense wrapped to prevent white screen */}
+        <Suspense fallback={null}>
+            <HeroText3D />
+        </Suspense>
 
         {/* Floating Accent Crystals */}
         <FloatingCrystals />

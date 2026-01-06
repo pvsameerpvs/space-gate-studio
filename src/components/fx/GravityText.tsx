@@ -19,23 +19,26 @@ export function GravityText({ text, className = "", delay = 0 }: GravityTextProp
           key={index}
           initial={{ 
             opacity: 0, 
-            y: -100, 
-            filter: "blur(12px)",
-            transform: "rotate(15deg)"
+            y: -150, 
+            filter: "blur(15px)",
+            scale: 1.5,
           }}
           whileInView={{ 
             opacity: 1, 
             y: 0, 
             filter: "blur(0px)",
-            transform: "rotate(0deg)"
+            scale: 1,
           }}
           viewport={{ once: true }}
           transition={{
-            duration: 1.2,
-            delay: delay + Math.random() * 0.5, // Random stagger for "sand" chaotic feel
-            ease: [0.19, 1, 0.22, 1] // Exponential ease out
+            duration: 1,
+            delay: delay + index * 0.08, // Sequential flowing delay
+            type: "spring",
+            damping: 18,
+            stiffness: 80,
+            mass: 1.2
           }}
-          className="inline-block origin-top"
+          className="inline-block origin-bottom"
         >
           {char}
         </motion.span>
