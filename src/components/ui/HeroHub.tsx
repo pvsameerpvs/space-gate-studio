@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useLayoutEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
@@ -8,11 +8,14 @@ import Image from "next/image";
 // SVG CABLE COMPONENT
 // ------------------------------------
 function Cable({ start, end, color = "#a855f7" }: { start: { x: number; y: number }, end: { x: number; y: number }, color?: string }) {
+  if (!start || !end) return null; // Safety check
+
   // Calculate control points for a smooth S-curve
   const midX = (start.x + end.x) / 2;
-  const midY = (start.y + end.y) / 2;
-  
+  // const midY = (start.y + end.y) / 2; // Unused for simple S-curve horizontal bias
+
   // Bezier curve with 2 control points for "bundling" look
+  // Flowing outwards from center (start) to card (end)
   const path = `M ${start.x} ${start.y} C ${midX} ${start.y}, ${midX} ${end.y}, ${end.x} ${end.y}`;
 
   return (
@@ -40,17 +43,20 @@ function Cable({ start, end, color = "#a855f7" }: { start: { x: number; y: numbe
 // ------------------------------------
 // CARD COMPONENT
 // ------------------------------------
-function TechCard({ 
-    title, sub, image, position, index 
-}: { 
-    title: string, sub: string, image: string, position: string, index: number 
-}) {
+// ForwardRef to allow parent to measure position
+const TechCard = React.forwardRef<HTMLDivElement, { 
+    title: string, sub: string, image: string, index: number, align?: 'left' | 'right' 
+}>(({ title, sub, image, index, align = 'left' }, ref) => {
     return (
         <motion.div
+            ref={ref}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5 + index * 0.1, duration: 0.6 }}
-            className={`absolute ${position} w-64 md:w-80 h-40 md:h-48 rounded-xl border-2 border-neon-purple/50 bg-black/80 backdrop-blur-xl overflow-hidden shadow-[0_0_30px_rgba(168,85,247,0.2)] group hover:scale-105 hover:border-neon-cyan/80 transition-all duration-300 cursor-pointer z-20`}
+            className={`
+                relative w-64 md:w-80 h-40 md:h-48 rounded-xl border-2 border-neon-purple/50 bg-black/80 backdrop-blur-xl overflow-hidden shadow-[0_0_30px_rgba(168,85,247,0.2)] 
+                group hover:scale-105 hover:border-neon-cyan/80 transition-all duration-300 cursor-pointer z-20
+            `}
         >
              {/* Background Image */}
              <div className="absolute inset-0 opacity-60 group-hover:opacity-80 transition-opacity">
@@ -59,62 +65,108 @@ function TechCard({
              </div>
 
              {/* Content */}
-             <div className="absolute bottom-0 left-0 w-full p-4">
+             <div className={`absolute bottom-0 w-full p-4 ${align === 'right' ? 'text-right' : 'text-left'}`}>
                 <div className="font-mono text-[10px] text-neon-cyan uppercase tracking-widest mb-1">{sub}</div>
                 <div className="font-brand text-2xl text-white drop-shadow-md">{title}</div>
              </div>
              
              {/* Tech Overlays */}
-             <div className="absolute top-2 right-2 flex gap-1">
+             <div className={`absolute top-2 ${align === 'right' ? 'left-2' : 'right-2'} flex gap-1`}>
                 {[1,2,3].map(i => <div key={i} className="w-1 h-1 bg-white/40 rounded-full" />)}
              </div>
              <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/50 to-transparent opacity-0 group-hover:opacity-100 animate-pulse" />
         </motion.div>
     );
-}
+});
+TechCard.displayName = "TechCard";
 
 export function HeroHub() {
     const containerRef = useRef<HTMLDivElement>(null);
-    const [center, setCenter] = useState({ x: 0, y: 0 });
-    const [dimensions, setDimensions] = useState({ w: 0, h: 0 });
+    const hubRef = useRef<HTMLDivElement>(null);
+    
+    // Refs for cards
+    const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-    // Update positions on resize
+    // Coordinates state
+    const [hubCenter, setHubCenter] = useState({ x: 0, y: 0 });
+    const [cardPoints, setCardPoints] = useState<{x: number, y: number}[]>([]);
+
+    // Measure positions function
+    const measurePositions = () => {
+        if (!containerRef.current || !hubRef.current) return;
+        
+        const containerRect = containerRef.current.getBoundingClientRect();
+        
+        // 1. Measure Hub Center
+        const hubRect = hubRef.current.getBoundingClientRect();
+        const hCx = (hubRect.left - containerRect.left) + hubRect.width / 2;
+        const hCy = (hubRect.top - containerRect.top) + hubRect.height / 2;
+        setHubCenter({ x: hCx, y: hCy });
+
+        // 2. Measure Card "Connection Points" (Centers of inner edge?)
+        // Actually simplest is center of card for now, or inner edge.
+        const points = cardRefs.current.map((card, i) => {
+            if (!card) return { x: 0, y: 0 };
+            const rect = card.getBoundingClientRect();
+            // Calculate center relative to container
+            const cx = (rect.left - containerRect.left) + rect.width / 2;
+            const cy = (rect.top - containerRect.top) + rect.height / 2;
+            return { x: cx, y: cy }; 
+        });
+        setCardPoints(points);
+    };
+
+    // Update on resize or mount
     useEffect(() => {
-        const update = () => {
-             if (containerRef.current) {
-                 const rect = containerRef.current.getBoundingClientRect();
-                 setCenter({ x: rect.width / 2, y: rect.height / 2 });
-                 setDimensions({ w: rect.width, h: rect.height });
-             }
+        measurePositions();
+        window.addEventListener('resize', measurePositions);
+        // Small delay to allow layout to settle
+        const t = setTimeout(measurePositions, 500); 
+        return () => {
+            window.removeEventListener('resize', measurePositions);
+            clearTimeout(t);
         };
-        update();
-        window.addEventListener('resize', update);
-        return () => window.removeEventListener('resize', update);
     }, []);
 
-    // Dynamic Connection Points based on % of screen
-    const cx = center.x;
-    const cy = center.y;
-    // Offsets for the cards (approximate centers of the cards)
-    // Top Left, Top Right, Bottom Left, Bottom Right
-    const connections = [
-        { x: cx - (dimensions.w > 768 ? 350 : 160), y: cy - (dimensions.h > 768 ? 200 : 150) },
-        { x: cx + (dimensions.w > 768 ? 350 : 160), y: cy - (dimensions.h > 768 ? 200 : 150) },
-        { x: cx - (dimensions.w > 768 ? 350 : 160), y: cy + (dimensions.h > 768 ? 200 : 150) },
-        { x: cx + (dimensions.w > 768 ? 350 : 160), y: cy + (dimensions.h > 768 ? 200 : 150) },
-    ];
-
   return (
-    <div ref={containerRef} className="relative w-full h-full z-20">
+    <div ref={containerRef} className="relative w-full h-full z-20 flex flex-col justify-between p-4 md:p-12 lg:p-20 py-24">
         
-        {/* SVG Layer for Cables */}
-        {connections.map((end, i) => (
-             <Cable key={i} start={center} end={end} color={i % 2 === 0 ? "#00e5ff" : "#d500f9"} />
-        ))}
+        {/* SVG Layer for Cables - Absolute behind everything */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+             {cardPoints.map((end, i) => (
+                 <Cable 
+                    key={i} 
+                    start={hubCenter} 
+                    end={end} 
+                    color={i % 2 === 0 ? "#00e5ff" : "#d500f9"} 
+                />
+             ))}
+        </div>
 
-        {/* Central Logo Hub */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30">
+        {/* TOP ROW: Cards 0 and 1 */}
+        <div className="flex justify-between items-start w-full z-20">
+             <TechCard 
+                ref={el => { cardRefs.current[0] = el; }}
+                index={0}
+                title="AI AGENTS"
+                sub="AUTONOMOUS SYSTEMS"
+                image="/images/ai-lab.png"
+                align="left"
+            />
+             <TechCard 
+                ref={el => { cardRefs.current[1] = el; }}
+                index={1}
+                title="NEURAL NETS"
+                sub="DEEP LEARNING"
+                image="/images/tech-bg.png"
+                align="right"
+            />
+        </div>
+
+        {/* MIDDLE ROW: Central Hub */}
+        <div className="flex justify-center items-center flex-grow z-30">
             <motion.div 
+                ref={hubRef}
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.8, type: "spring" }}
@@ -136,42 +188,25 @@ export function HeroHub() {
             </motion.div>
         </div>
 
-        {/* Corner Content Cards */}
-        {/* 1. Top Left */}
-        <TechCard 
-            index={0}
-            position="top-[10%] left-[5%] md:top-[20%] md:left-[10%]"
-            title="AI AGENTS"
-            sub="AUTONOMOUS SYSTEMS"
-            image="/images/ai-lab.png"
-        />
-
-        {/* 2. Top Right */}
-        <TechCard 
-            index={1}
-            position="top-[10%] right-[5%] md:top-[20%] md:right-[10%]"
-            title="NEURAL NETS"
-            sub="DEEP LEARNING"
-            image="/images/tech-bg.png"
-        />
-
-        {/* 3. Bottom Left */}
-        <TechCard 
-            index={2}
-            position="bottom-[10%] left-[5%] md:bottom-[20%] md:left-[10%]"
-            title="SPATIAL UI"
-            sub="IMMERSIVE COMPUTING"
-            image="/images/hero-bg-cinematic.png"
-        />
-
-        {/* 4. Bottom Right */}
-         <TechCard 
-            index={3}
-            position="bottom-[10%] right-[5%] md:bottom-[20%] md:right-[10%]"
-            title="PREDICTIVE UX"
-            sub="ADAPTIVE INTERFACES"
-            image="/images/ai-lab-walkthrough.png"
-        />
+        {/* BOTTOM ROW: Cards 2 and 3 */}
+        <div className="flex justify-between items-end w-full z-20">
+            <TechCard 
+                ref={el => { cardRefs.current[2] = el; }}
+                index={2}
+                title="SPATIAL UI"
+                sub="IMMERSIVE COMPUTING"
+                image="/images/hero-bg-cinematic.png"
+                align="left"
+            />
+             <TechCard 
+                ref={el => { cardRefs.current[3] = el; }}
+                index={3}
+                title="PREDICTIVE UX"
+                sub="ADAPTIVE INTERFACES"
+                image="/images/ai-lab-walkthrough.png"
+                align="right"
+            />
+        </div>
 
     </div>
   );
