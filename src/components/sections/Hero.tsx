@@ -56,7 +56,7 @@ export function Hero() {
           </p>
         </Reveal>
 
-        <Reveal variant="scale-up" delay={0.8}>
+        {/* <Reveal variant="scale-up" delay={0.8}>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <motion.button 
               whileHover={{ scale: 1.05 }}
@@ -78,7 +78,7 @@ export function Hero() {
               VIEW CASE STUDIES
             </motion.button>
           </div>
-        </Reveal>
+        </Reveal> */}
 
         <div data-hero className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[

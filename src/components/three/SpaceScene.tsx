@@ -2,7 +2,7 @@
 
 import React, { useRef, useMemo, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Stars, PerspectiveCamera, Float, Text } from "@react-three/drei";
+import { Stars, PerspectiveCamera, Float, Text, GradientTexture } from "@react-three/drei";
 import * as THREE from "three";
 
 function HeroText3D() {
@@ -32,12 +32,13 @@ function HeroText3D() {
       characters="REALITIES"
     >
       REALITIES
-      <meshStandardMaterial
-        color="#00ffd1"
-        emissive="#00ffd1"
-        emissiveIntensity={3}
-        toneMapped={false}
-      />
+      <meshBasicMaterial toneMapped={false}>
+         <GradientTexture
+            stops={[0, 0.5, 1]} 
+            colors={["#00e5ff", "#2979ff", "#d500f9"]} // Cyan -> Blue -> Purple/Magenta
+            size={1024} 
+         />
+      </meshBasicMaterial>
     </Text>
   );
 }
@@ -106,10 +107,10 @@ function ParticleSphere() {
       </bufferGeometry>
       <pointsMaterial
         size={0.06}
-        color="#aa50ff"
+        color="#2979ff" // Deep Blue from theme
         transparent
         depthWrite={false}
-        opacity={0.8}
+        opacity={0.6}
         sizeAttenuation
         blending={THREE.AdditiveBlending}
       />
@@ -128,12 +129,7 @@ function FloatingCrystals() {
                 ]}>
                     <mesh rotation={[Math.random(), Math.random(), 0]}>
                         <octahedronGeometry args={[0.3]} />
-                        <meshStandardMaterial 
-                            color="#00ffd1" 
-                            emissive="#00ffd1" 
-                            emissiveIntensity={2} 
-                            toneMapped={false}
-                        />
+                        <meshBasicMaterial color="#d500f9" toneMapped={false} />
                     </mesh>
                 </Float>
              ))}
