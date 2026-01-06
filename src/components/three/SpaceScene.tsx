@@ -1,71 +1,137 @@
 "use client";
 
-import React, { useMemo, useRef } from "react";
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { Float, Stars, Environment } from "@react-three/drei";
+import React, { useRef, useMemo } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Stars, PerspectiveCamera, Float } from "@react-three/drei";
 import * as THREE from "three";
 
-function Planet({ position, texturePath, size, color }: { position: [number, number, number]; texturePath: string; size: number; color: string }) {
-  const mesh = useRef<THREE.Mesh>(null);
-  const texture = useLoader(THREE.TextureLoader, texturePath);
+function ParticleSphere() {
+  const points = useRef<THREE.Points>(null);
+  
+  // Generate points for the sphere
+  const count = 3000;
+  const [positions, originalPositions] = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    const orig = new Float32Array(count * 3);
+    const spherical = new THREE.Spherical();
+    const vec3 = new THREE.Vector3();
 
-  useFrame(({ clock }) => {
-    if (!mesh.current) return;
-    mesh.current.rotation.y = clock.getElapsedTime() * 0.05;
-    mesh.current.rotation.x = Math.sin(clock.getElapsedTime() * 0.1) * 0.05;
+    for (let i = 0; i < count; i++) {
+        spherical.set(
+            4, 
+            Math.acos(THREE.MathUtils.mapLinear(i, 0, count, -1, 1)), 
+            (Math.PI * (1 + 5 ** 0.5) * i)
+        );
+        vec3.setFromSpherical(spherical);
+        pos[i * 3] = vec3.x;
+        pos[i * 3 + 1] = vec3.y;
+        pos[i * 3 + 2] = vec3.z;
+        orig[i * 3] = vec3.x;
+        orig[i * 3 + 1] = vec3.y;
+        orig[i * 3 + 2] = vec3.z;
+    }
+    return [pos, orig];
+  }, []);
+
+  useFrame((state) => {
+    if (!points.current) return;
+    
+    const time = state.clock.getElapsedTime();
+    const positionAttribute = points.current.geometry.getAttribute("position");
+    
+    for (let i = 0; i < count; i++) {
+        // Create an elegant undulation effect
+        const x = originalPositions[i * 3];
+        const y = originalPositions[i * 3 + 1];
+        const z = originalPositions[i * 3 + 2];
+        
+        // Wave modifier based on position and time
+        const wave = Math.sin(x * 0.5 + time * 0.5) * Math.cos(y * 0.3 + time * 0.3) * Math.sin(z * 0.5 + time * 0.2);
+        const scale = 1 + wave * 0.2; // Breathing intensity
+
+        positionAttribute.setXYZ(i, x * scale, y * scale, z * scale);
+    }
+    
+    positionAttribute.needsUpdate = true;
+    points.current.rotation.y = time * 0.05;
+    points.current.rotation.z = time * 0.02;
   });
 
   return (
-    <Float speed={1.2} rotationIntensity={0.8} floatIntensity={1.3}>
-      <mesh ref={mesh} position={position}>
-        <sphereGeometry args={[size, 64, 64]} />
-        <meshStandardMaterial 
-          map={texture} 
-          roughness={0.7} 
-          metalness={0.3} 
-          emissive={color}
-          emissiveIntensity={0.15}
+    <points ref={points}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          count={positions.length / 3}
+          array={positions}
+          itemSize={3}
         />
-      </mesh>
-    </Float>
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.06}
+        color="#aa50ff"
+        transparent
+        opacity={0.8}
+        sizeAttenuation
+        blending={THREE.AdditiveBlending}
+      />
+    </points>
   );
 }
 
-function FoggyGlow() {
-  return (
-    <>
-      <ambientLight intensity={0.2} />
-      <directionalLight position={[5, 3, 2]} intensity={1.5} color="#ffffff" />
-      <pointLight position={[-6, -2, -4]} intensity={2.0} color={"#00ffd1"} distance={20} />
-      <pointLight position={[6, 2, -2]} intensity={1.8} color={"#aa50ff"} distance={20} />
-      <fog attach="fog" args={["#03040B", 10, 40]} />
-    </>
-  );
+function FloatingCrystals() {
+    return (
+        <group>
+             {[...Array(6)].map((_, i) => (
+                <Float key={i} speed={2} rotationIntensity={2} floatIntensity={4} position={[
+                    Math.cos(i * Math.PI / 3) * 6,
+                    Math.sin(i * Math.PI / 3) * 4,
+                    Math.random() * -5
+                ]}>
+                    <mesh rotation={[Math.random(), Math.random(), 0]}>
+                        <octahedronGeometry args={[0.3]} />
+                        <meshStandardMaterial 
+                            color="#00ffd1" 
+                            emissive="#00ffd1" 
+                            emissiveIntensity={2} 
+                            toneMapped={false}
+                        />
+                    </mesh>
+                </Float>
+             ))}
+        </group>
+    )
+}
+
+function Rig() {
+  useFrame((state) => {
+    state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, state.mouse.x * 2, 0.05);
+    state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, state.mouse.y * 2, 0.05);
+    state.camera.lookAt(0, 0, 0);
+  });
+  return null;
 }
 
 export function SpaceScene() {
   return (
-    <div className="absolute inset-0 -z-10 bg-[#03040B]">
+    <div className="absolute inset-0 -z-10 h-full w-full">
       <Canvas
-        camera={{ position: [0, 0, 10], fov: 45 }}
+        gl={{ antialias: true, alpha: true }}
         dpr={[1, 2]}
-        gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
-        onCreated={({ gl }) => {
-          gl.toneMapping = THREE.ACESFilmicToneMapping;
-          gl.outputColorSpace = THREE.SRGBColorSpace;
-        }}
       >
-        <FoggyGlow />
-        <Stars radius={120} depth={50} count={2000} factor={4} saturation={0} fade speed={0.5} />
+        <PerspectiveCamera makeDefault position={[0, 0, 10]} />
+        <ambientLight intensity={0.5} />
         
-        {/* Cyan Ice Planet */}
-        <Planet position={[-3.5, 1.2, -3]} texturePath="/textures/planet_ice.png" size={1.4} color="#00ffd1" />
+        {/* Deep Space Background Stars */}
+        <Stars radius={150} depth={50} count={6000} factor={3} saturation={0} fade speed={0.5} />
         
-        {/* Purple Rock Planet */}
-        <Planet position={[3.8, -1.5, -4]} texturePath="/textures/planet_rock.png" size={1.8} color="#aa50ff" />
+        {/* Main Fluid Sphere */}
+        <ParticleSphere />
+
+        {/* Floating Accent Crystals */}
+        <FloatingCrystals />
         
-        {/* Distant small moon */}
-        <Planet position={[1.5, 2.5, -10]} texturePath="/textures/planet_ice.png" size={0.6} color="#ffffff" />
+        <Rig />
       </Canvas>
     </div>
   );

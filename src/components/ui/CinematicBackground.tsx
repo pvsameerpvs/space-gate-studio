@@ -47,7 +47,7 @@ export function CinematicBackground() {
 
       {/* Floating Nebula Orbs */}
       <motion.div 
-        className="absolute -top-[20%] -left-[10%] w-[50vw] h-[50vh] rounded-full bg-violet-600/10 blur-[120px]"
+        className="absolute -top-[20%] -left-[10%] w-[50vw] h-[50vh] rounded-full bg-neon-purple/30 blur-[130px]"
         animate={{
           scale: [1, 1.2, 1],
           opacity: [0.1, 0.2, 0.1],
