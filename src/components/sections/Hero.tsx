@@ -14,7 +14,7 @@ export function Hero() {
   }, []);
 
   return (
-    <section id="top" ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="top" ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#03040B]">
       {/* 3D Space Scene Background (Preserved as requested) */}
       <SpaceScene />
       

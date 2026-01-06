@@ -148,7 +148,7 @@ function Rig() {
 
 export function SpaceScene() {
   return (
-    <div className="absolute inset-0 -z-10 h-full w-full">
+    <div className="absolute inset-0 z-0 h-full w-full">
       <Canvas
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 2]}
