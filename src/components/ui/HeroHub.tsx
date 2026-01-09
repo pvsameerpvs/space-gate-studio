@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useRef, useState, useEffect, useLayoutEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, MotionStyle } from "framer-motion";
 import Image from "next/image";
 
 // ------------------------------------
 // SVG CABLE COMPONENT
 // ------------------------------------
-function Cable({ start, end, color = "#a855f7" }: { start: { x: number; y: number }, end: { x: number; y: number }, color?: string }) {
+function Cable({ start, end, color = "#a855f7", style }: { start: { x: number; y: number }, end: { x: number; y: number }, color?: string, style?: MotionStyle }) {
   if (!start || !end) return null; // Safety check
 
   // Calculate control points for a smooth S-curve
@@ -19,7 +19,7 @@ function Cable({ start, end, color = "#a855f7" }: { start: { x: number; y: numbe
   const path = `M ${start.x} ${start.y} C ${midX} ${start.y}, ${midX} ${end.y}, ${end.x} ${end.y}`;
 
   return (
-    <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" style={{ overflow: 'visible' }}>
+    <motion.svg style={{ overflow: 'visible', ...style }} className="absolute inset-0 w-full h-full pointer-events-none z-0">
       {/* Outer Glow */}
       <path d={path} fill="none" stroke={color} strokeWidth="6" strokeOpacity="0.2" className="blur-sm" />
       {/* Core Line */}
@@ -36,7 +36,7 @@ function Cable({ start, end, color = "#a855f7" }: { start: { x: number; y: numbe
         transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
         className="opacity-60"
       />
-    </svg>
+    </motion.svg>
   );
 }
 
@@ -45,11 +45,12 @@ function Cable({ start, end, color = "#a855f7" }: { start: { x: number; y: numbe
 // ------------------------------------
 // ForwardRef to allow parent to measure position
 const TechCard = React.forwardRef<HTMLDivElement, { 
-    title: string, sub: string, image: string, index: number, align?: 'left' | 'right' 
-}>(({ title, sub, image, index, align = 'left' }, ref) => {
+    title: string, sub: string, image: string, index: number, align?: 'left' | 'right', style?: MotionStyle
+}>(({ title, sub, image, index, align = 'left', style }, ref) => {
     return (
         <motion.div
             ref={ref}
+            style={style}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5 + index * 0.1, duration: 0.6 }}
@@ -83,6 +84,7 @@ TechCard.displayName = "TechCard";
 export function HeroHub() {
     const containerRef = useRef<HTMLDivElement>(null);
     const hubRef = useRef<HTMLDivElement>(null);
+    const { scrollY } = useScroll();
     
     // Refs for cards
     const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -128,6 +130,31 @@ export function HeroHub() {
         };
     }, []);
 
+    // Scroll Animations
+    // Scroll Animations
+    // Calculate deltas from cards to hub center
+    // Reduced range [0, 250] for faster animation ("less scroll time")
+    const scrollRange = [0, 250];
+    
+    // Cables fade out quickly
+    const cableOpacity = useTransform(scrollY, [0, 100], [1, 0]);
+
+    const x0 = useTransform(scrollY, scrollRange, [0, (hubCenter.x - (cardPoints[0]?.x || 0))]);
+    const y0 = useTransform(scrollY, scrollRange, [0, (hubCenter.y - (cardPoints[0]?.y || 0))]);
+
+    const x1 = useTransform(scrollY, scrollRange, [0, (hubCenter.x - (cardPoints[1]?.x || 0))]);
+    const y1 = useTransform(scrollY, scrollRange, [0, (hubCenter.y - (cardPoints[1]?.y || 0))]);
+
+    const x2 = useTransform(scrollY, scrollRange, [0, (hubCenter.x - (cardPoints[2]?.x || 0))]);
+    const y2 = useTransform(scrollY, scrollRange, [0, (hubCenter.y - (cardPoints[2]?.y || 0))]);
+
+    const x3 = useTransform(scrollY, scrollRange, [0, (hubCenter.x - (cardPoints[3]?.x || 0))]);
+    const y3 = useTransform(scrollY, scrollRange, [0, (hubCenter.y - (cardPoints[3]?.y || 0))]);
+
+    const hubOpacity = useTransform(scrollY, [0, 150], [1, 0]);
+    const hubScale = useTransform(scrollY, [0, 150], [1, 0.5]);
+    const hubDisplay = useTransform(scrollY, (v) => v > 250 ? "none" : "flex");
+
   return (
     <div ref={containerRef} className="relative w-full h-full z-20 flex flex-col justify-between p-4 md:p-12 lg:p-20 py-24">
         
@@ -139,6 +166,7 @@ export function HeroHub() {
                     start={hubCenter} 
                     end={end} 
                     color={i % 2 === 0 ? "#00e5ff" : "#d500f9"} 
+                    style={{ opacity: cableOpacity }}
                 />
              ))}
         </div>
@@ -152,6 +180,7 @@ export function HeroHub() {
                 sub="AUTONOMOUS SYSTEMS"
                 image="/images/ai-lab.png"
                 align="left"
+                style={{ x: x0, y: y0, zIndex: 50 }}
             />
              <TechCard 
                 ref={el => { cardRefs.current[1] = el; }}
@@ -160,6 +189,7 @@ export function HeroHub() {
                 sub="DEEP LEARNING"
                 image="/images/tech-bg.png"
                 align="right"
+                style={{ x: x1, y: y1, zIndex: 50 }}
             />
         </div>
 
@@ -167,6 +197,7 @@ export function HeroHub() {
         <div className="flex justify-center items-center flex-grow z-30">
             <motion.div 
                 ref={hubRef}
+                style={{ opacity: hubOpacity, scale: hubScale, display: hubDisplay }}
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.8, type: "spring" }}
@@ -197,6 +228,7 @@ export function HeroHub() {
                 sub="IMMERSIVE COMPUTING"
                 image="/images/hero-bg-cinematic.png"
                 align="left"
+                style={{ x: x2, y: y2, zIndex: 50 }}
             />
              <TechCard 
                 ref={el => { cardRefs.current[3] = el; }}
@@ -205,6 +237,7 @@ export function HeroHub() {
                 sub="ADAPTIVE INTERFACES"
                 image="/images/ai-lab-walkthrough.png"
                 align="right"
+                style={{ x: x3, y: y3, zIndex: 50 }}
             />
         </div>
 
