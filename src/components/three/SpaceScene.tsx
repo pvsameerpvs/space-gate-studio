@@ -31,7 +31,7 @@ function HeroText3D() {
       anchorY="middle"
       characters="REALITIES"
     >
-      REALITIES
+   
       <meshBasicMaterial toneMapped={false}>
          <GradientTexture
             stops={[0, 0.5, 1]} 
@@ -118,24 +118,7 @@ function ParticleSphere() {
   );
 }
 
-function FloatingCrystals() {
-    return (
-        <group>
-             {[...Array(6)].map((_, i) => (
-                <Float key={i} speed={2} rotationIntensity={2} floatIntensity={4} position={[
-                    Math.cos(i * Math.PI / 3) * 6,
-                    Math.sin(i * Math.PI / 3) * 4,
-                    Math.random() * -5
-                ]}>
-                    <mesh rotation={[Math.random(), Math.random(), 0]}>
-                        <octahedronGeometry args={[0.3]} />
-                        <meshBasicMaterial color="#d500f9" toneMapped={false} />
-                    </mesh>
-                </Float>
-             ))}
-        </group>
-    )
-}
+
 
 function Rig() {
   useFrame((state) => {
@@ -167,8 +150,7 @@ export function SpaceScene() {
             <HeroText3D />
         </Suspense>
 
-        {/* Floating Accent Crystals */}
-        <FloatingCrystals />
+        
         
         <Rig />
       </Canvas>
