@@ -13,8 +13,8 @@ export function FlyingText({ text, className = "", delay = 0 }: FlyingTextProps)
   const words = text.split(" ");
 
   return (
-    <motion.div
-      className={`flex flex-wrap ${className}`}
+    <motion.span
+      className={`inline-flex flex-wrap ${className}`}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
@@ -59,6 +59,6 @@ export function FlyingText({ text, className = "", delay = 0 }: FlyingTextProps)
           ))}
         </div>
       ))}
-    </motion.div>
+    </motion.span>
   );
 }
