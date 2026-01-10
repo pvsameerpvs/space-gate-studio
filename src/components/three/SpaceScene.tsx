@@ -146,9 +146,9 @@ export function SpaceScene() {
         <ParticleSphere />
         
         {/* 3D Falling Text - Suspense wrapped to prevent white screen */}
-        <Suspense fallback={null}>
+        {/* <Suspense fallback={null}>
             <HeroText3D />
-        </Suspense>
+        </Suspense> */}
 
         
         

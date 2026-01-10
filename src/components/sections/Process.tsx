@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react";
 import { Reveal } from "@/components/motion/Reveal";
 import { Card, CardContent } from "@/components/ui/card";
 import { useSound } from "@/components/sound/SoundProvider";
+import { motion } from "framer-motion";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
@@ -59,7 +60,18 @@ export function Process() {
         <div className="relative mt-12 grid grid-cols-1 md:grid-cols-[1fr_24px_1fr] gap-4">
           <div className="hidden md:block" />
           <div className="relative hidden md:block">
-            <div ref={lineRef} className="absolute left-1/2 top-0 h-full w-[2px] -translate-x-1/2 bg-gradient-to-b from-neon-cyan via-purple-500 to-neon-purple opacity-70 shadow-[0_0_15px_rgba(88,231,255,0.5)]" />
+            {/* Base Line */}
+            <div className="absolute left-1/2 top-0 h-full w-[2px] -translate-x-1/2 bg-white/10" />
+            
+            {/* Animated Fill Line */}
+            <div ref={lineRef} className="absolute left-1/2 top-0 h-full w-[2px] -translate-x-1/2 bg-gradient-to-b from-neon-cyan via-purple-500 to-neon-purple shadow-[0_0_15px_rgba(88,231,255,0.8)]" />
+            
+            {/* Moving Light Pulse */}
+            <motion.div 
+               className="absolute left-1/2 top-0 w-1 h-20 -translate-x-1/2 bg-gradient-to-b from-transparent via-white to-transparent blur-sm z-10"
+               animate={{ y: ["0%", "100%"] }}
+               transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            />
           </div>
           <div className="hidden md:block" />
 
@@ -91,7 +103,8 @@ export function Process() {
 
               {/* Center Line/Dot */}
               <div className="relative hidden md:flex items-start justify-center">
-                <div className="mt-5 h-4 w-4 rounded-full bg-neon-cyan shadow-[0_0_30px_rgba(0,255,209,0.8)] z-10 animate-pulse" />
+                <div className="mt-5 h-4 w-4 rounded-full bg-neon-cyan border-2 border-white shadow-[0_0_30px_rgba(0,255,209,0.8)] z-10 animate-pulse" />
+                <div className="absolute mt-5 w-8 h-8 rounded-full border border-neon-cyan/30 animate-ping opacity-50" />
               </div>
 
               {/* Right Column */}

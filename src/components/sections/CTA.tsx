@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Magnetic } from "@/components/fx/Magnetic";
+import { Magnetic } from "@/components/motion/Magnetic";
 import { Ripple } from "@/components/fx/Ripple";
 import { useSound } from "@/components/sound/SoundProvider";
 import { Reveal } from "@/components/motion/Reveal";

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useSound } from "@/components/sound/SoundProvider";
+import { Magnetic } from "@/components/motion/Magnetic";
 
 export function Footer() {
   const { play } = useSound();
@@ -14,15 +15,16 @@ export function Footer() {
         </div>
         <div className="flex flex-wrap gap-2">
           {["Privacy", "Terms", "Careers"].map((t) => (
+            <Magnetic key={t}>
             <a
-              key={t}
               href="#"
               onMouseEnter={() => play("hover")}
               onClick={(e) => { e.preventDefault(); play("click"); }}
-              className="rounded-full border border-white/10 bg-white/5 px-4 py-2 font-mono text-xs text-white/65 hover:text-white hover:bg-white/10 transition"
+              className="rounded-full border border-white/10 bg-white/5 px-4 py-2 font-mono text-xs text-white/65 hover:text-white hover:bg-white/10 transition block"
             >
               {t}
             </a>
+            </Magnetic>
           ))}
         </div>
       </div>

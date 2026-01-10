@@ -5,7 +5,7 @@ import { SoundProvider } from "@/components/sound/SoundProvider";
 import { LenisProvider } from "@/components/motion/LenisProvider";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { TopNav } from "@/components/nav/TopNav";
-import { CinematicCursor } from "@/components/fx/CinematicCursor";
+import { FluidCursor } from "@/components/ui/FluidCursor";
 import { CinematicBackground } from "@/components/ui/CinematicBackground";
 import { LoadingGate } from "@/components/fx/LoadingGate";
 
@@ -38,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <LoadingGate />
             <TopNav />
             <CinematicBackground />
-            <CinematicCursor />
+            <FluidCursor />
             <div className="pt-2">
               <PageTransition>{children}</PageTransition>
             </div>

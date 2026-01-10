@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useSound } from "@/components/sound/SoundProvider";
 import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
 import { Smartphone, Monitor, BrainCircuit, Zap, ArrowRight } from "lucide-react";
+import { KineticText } from "@/components/ui/KineticText";
 
 const services = [
   {
@@ -121,7 +122,9 @@ export function Services() {
                     </div>
 
                     {/* Content */}
-                    <h3 className="font-brand text-2xl mb-2 text-white group-hover/card:text-neon-cyan transition-colors">{s.title}</h3>
+                    <h3 className="font-brand text-2xl mb-2 text-white group-hover/card:text-neon-cyan transition-colors">
+                      <KineticText text={s.title} />
+                    </h3>
                     <p className="font-mono text-xs text-neon-purple mb-6 uppercase tracking-wider">{s.desc}</p>
                     
                     <ul className="mt-auto space-y-3">
