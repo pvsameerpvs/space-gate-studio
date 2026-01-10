@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { SpaceScene } from "@/components/three/SpaceScene";
+// import { SpaceScene } from "@/components/three/SpaceScene";
 import { useSound } from "@/components/sound/SoundProvider";
 import { HeroHub } from "@/components/ui/HeroHub";
 
@@ -16,10 +16,17 @@ export function Hero() {
   return (
     <section id="top" ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#03040B]">
       {/* 3D Space Scene Background (Preserved as requested) */}
-      <SpaceScene />
+      <video 
+        className="absolute inset-0 w-full h-full object-cover z-0 scale-110"
+        src="/images/hero-section-vid-3.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+      />
       
       {/* Overlay to dim background slightly for the UI Hub */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/80 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black/80 pointer-events-none" />
 
       {/* Main Hub & Spoke UI Layer */}
       <HeroHub />
