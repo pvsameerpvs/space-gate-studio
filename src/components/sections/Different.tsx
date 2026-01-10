@@ -6,6 +6,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { Cpu, Sparkles, Rocket, Smartphone, Globe } from "lucide-react";
 import { useSound } from "@/components/sound/SoundProvider";
 import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { FlyingText } from "@/components/ui/FlyingText";
 
 const items = [
   { icon: Cpu, title: "AI‑Powered Development", desc: "Intelligent features, automation, personalization." },
@@ -97,9 +98,12 @@ export function Different() {
     <section id="different" className="relative py-24">
       <div className="mx-auto max-w-6xl px-4">
         <Reveal>
-          <div className="font-mono text-xs tracking-[0.35em] text-neon-purple/80 font-bold mb-4">WHAT MAKES US DIFFERENT</div>
-          <h2 className="font-brand text-4xl sm:text-5xl max-w-2xl leading-tight">
-            Built to feel like the <span className="text-neon-purple">future</span>.
+          <div className="font-mono text-xs tracking-[0.35em] text-neon-purple/80 font-bold mb-4 overflow-hidden">
+            <FlyingText text="WHAT MAKES US DIFFERENT" />
+          </div>
+          <h2 className="font-brand text-4xl sm:text-5xl max-w-2xl leading-tight overflow-visible">
+            <FlyingText text="Built to feel like the" delay={0.2} />
+            <span className="text-neon-purple block mt-2"><FlyingText text="future." delay={0.6} /></span>
           </h2>
         </Reveal>
 

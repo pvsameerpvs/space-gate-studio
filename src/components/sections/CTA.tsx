@@ -6,6 +6,7 @@ import { Magnetic } from "@/components/motion/Magnetic";
 import { Ripple } from "@/components/fx/Ripple";
 import { useSound } from "@/components/sound/SoundProvider";
 import { Reveal } from "@/components/motion/Reveal";
+import { FlyingText } from "@/components/ui/FlyingText";
 
 export function CTA() {
   const { play } = useSound();
@@ -24,9 +25,11 @@ export function CTA() {
           <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl p-10 shadow-glow overflow-hidden relative">
             <div className="absolute -inset-20 opacity-60 bg-[conic-gradient(from_180deg_at_50%_50%,rgba(88,231,255,0.18),rgba(170,80,255,0.18),rgba(0,255,209,0.14),rgba(88,231,255,0.18))] blur-3xl" />
             <div className="relative">
-              <div className="font-mono text-xs tracking-[0.35em] text-white/60">CALL TO ACTION</div>
-              <h2 className="mt-4 font-brand text-5xl sm:text-6xl leading-[1.05]">
-                Open Your <span className="bg-gradient-to-r from-neon-cyan via-neon-blue to-neon-purple bg-clip-text text-transparent">Space Gate</span> Today
+              <div className="font-mono text-xs tracking-[0.35em] text-white/60 overflow-hidden">
+                <FlyingText text="CALL TO ACTION" />
+              </div>
+              <h2 className="mt-4 font-brand text-5xl sm:text-6xl leading-[1.05] overflow-visible">
+                <FlyingText text="Open Your" delay={0.1} /> <span className="bg-gradient-to-r from-neon-cyan via-neon-blue to-neon-purple bg-clip-text text-transparent inline-block"><FlyingText text="Space Gate" delay={0.5} /></span> <FlyingText text="Today" delay={0.9} />
               </h2>
               <p className="mt-5 max-w-2xl font-ui text-white/75">
                 Want a website or app that feels like a living sci‑fi interface? Let’s build something viral, cinematic, and fast.

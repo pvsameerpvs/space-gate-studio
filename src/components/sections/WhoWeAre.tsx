@@ -6,6 +6,7 @@ import { useSound } from "@/components/sound/SoundProvider";
 import { motion } from "framer-motion";
 import { NeuralNetworkBackground } from "@/components/three/NeuralNetworkBackground";
 import { KineticText } from "@/components/ui/KineticText";
+import { FlyingText } from "@/components/ui/FlyingText";
 
 export function WhoWeAre() {
   const { play } = useSound();
@@ -21,17 +22,22 @@ export function WhoWeAre() {
             {/* Text Content */}
             <div className="space-y-6">
               <Reveal>
-                <div className="font-mono text-xs tracking-[0.35em] text-neon-cyan/80 font-bold">WHO WE ARE</div>
+                <div className="font-mono text-xs tracking-[0.35em] text-neon-cyan/80 font-bold overflow-hidden">
+                  <FlyingText text="WHO WE ARE" />
+                </div>
               </Reveal>
               <Reveal delay={0.1}>
-                {/* Replaced static H2 with KineticText for the first part or just style it better */}
-                <h2 className="font-brand text-4xl sm:text-5xl leading-tight">
-                    An AI-driven studio in <span className="text-neon-cyan">Dubai</span>.
+                {/* Replaced static H2 with FlyingText for chaotic reveal */}
+                <h2 className="font-brand text-4xl sm:text-5xl leading-tight overflow-visible">
+                    <FlyingText text="An AI-driven studio in" delay={0.2} />
+                    <span className="text-neon-cyan block mt-2">
+                      <FlyingText text="Dubai." delay={0.6} />
+                    </span>
                 </h2>
               </Reveal>
               <Reveal delay={0.2}>
                 <p className="text-lg font-ui text-white/75 leading-relaxed max-w-lg">
-                  We build products that feel alive. Think: <span className="text-white font-bold">space UI</span>, cinematic motion, tactile feedback,
+                  We build products that feel alive. Think: <span className="text-white font-bold inline-block"><FlyingText text="space UI," delay={0.8} /></span> cinematic motion, tactile feedback,
                   and AI-native experiences that users want to share.
                 </p>
               </Reveal>
@@ -70,48 +76,49 @@ export function WhoWeAre() {
             </Reveal>
           </div>
 
-        <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
           {[
             { 
               t: "Experience-first", 
               d: "Every pixel is intentional. Every interaction has feedback.",
-              color: "from-cyan-400 to-blue-500",
-              border: "group-hover:border-cyan-400/50",
-              shadow: "group-hover:shadow-[0_0_30px_rgba(34,211,238,0.3)]"
+              icon: "01",
+              gradient: "from-cyan-500/20 to-blue-500/20",
+              border: "group-hover:border-cyan-400"
             },
             { 
               t: "AI-native", 
               d: "We design flows around automation, personalization, and intelligence.",
-              color: "from-purple-400 to-pink-500",
-              border: "group-hover:border-purple-400/50",
-              shadow: "group-hover:shadow-[0_0_30px_rgba(192,132,252,0.3)]"
+              icon: "02",
+              gradient: "from-purple-500/20 to-pink-500/20",
+              border: "group-hover:border-purple-400"
             },
             { 
               t: "Built to ship", 
               d: "Fast, scalable, production-ready code with performance discipline.",
-              color: "from-amber-300 to-orange-500",
-              border: "group-hover:border-amber-400/50",
-              shadow: "group-hover:shadow-[0_0_30px_rgba(251,191,36,0.3)]"
+              icon: "03",
+              gradient: "from-amber-500/20 to-orange-500/20",
+              border: "group-hover:border-amber-400"
             }
           ].map((x, i) => (
-            <Reveal key={x.t} delay={0.1 * i} variant="scale-up" className="h-full">
+            <Reveal key={x.t} delay={0.2 + (0.1 * i)} variant="scale-up" className="h-full">
               <motion.div
-                className={`group relative h-full rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm transition-all duration-500 ${x.border} ${x.shadow} overflow-hidden`}
-                whileHover={{ 
-                  y: -10,
-                  transition: { duration: 0.2 } 
-                }}
+                className={`group relative h-full rounded-3xl border border-white/5 bg-black/40 p-8 backdrop-blur-xl transition-all duration-500 hover:bg-white/5 ${x.border} overflow-hidden hover:-translate-y-2`}
               >
-                {/* Holographic Gradient Overlay */}
-                <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition duration-500 bg-gradient-to-br ${x.color}`} />
+                {/* Number/Icon Background */}
+                <div className="absolute -right-4 -top-4 text-[120px] font-bold text-white/5 font-brand select-none group-hover:text-white/10 transition-colors duration-700">
+                  {x.icon}
+                </div>
                 
+                {/* Gradient Glow */}
+                <div className={`absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t ${x.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-2xl`} />
+
                 {/* Content */}
                 <div className="relative z-10">
-                  <div className={`mb-6 w-12 h-1 bg-gradient-to-r ${x.color} rounded-full group-hover:w-full transition-all duration-500`} />
-                  <h3 className="text-2xl font-brand text-white md:text-3xl"><KineticText text={x.t} /></h3>
-                  <p className="mt-4 text-sm font-ui text-white/60 leading-relaxed group-hover:text-white/90 transition-colors">
-                    {x.d}
-                  </p>
+                   <h3 className="text-2xl font-brand text-white mb-4"><KineticText text={x.t} /></h3>
+                   <div className="w-12 h-[2px] bg-white/20 mb-4 group-hover:w-full group-hover:bg-white/50 transition-all duration-500" />
+                   <p className="font-ui text-sm text-white/60 leading-relaxed group-hover:text-white/80 transition-colors">
+                     {x.d}
+                   </p>
                 </div>
               </motion.div>
             </Reveal>

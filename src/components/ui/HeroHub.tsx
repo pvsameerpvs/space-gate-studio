@@ -4,6 +4,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring, useMotionValue, useMotionTemplate, MotionStyle } from "framer-motion";
 import Image from "next/image";
 import { KineticText } from "@/components/ui/KineticText";
+import { FlyingText } from "@/components/ui/FlyingText";
 
 // ------------------------------------
 // SVG CABLE COMPONENT
@@ -103,9 +104,9 @@ const TechCard = React.forwardRef<HTMLDivElement, {
                 {/* Content */}
                 <div className={`absolute bottom-0 w-full p-4 ${align === 'right' ? 'text-right' : 'text-left'} transform-gpu translate-z-10`}>
                     <div className="font-mono text-[10px] text-neon-cyan uppercase tracking-widest mb-1">{sub}</div>
-                    <div className="font-brand text-2xl text-white drop-shadow-md">
-                        <KineticText text={title} />
-                    </div>
+                    <div className="font-brand text-2xl text-white drop-shadow-md overflow-visible">
+                    <FlyingText text={title} delay={0.5 + index * 0.1} />
+                </div>
                 </div>
                 
                 {/* Tech Deco */}

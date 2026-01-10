@@ -6,6 +6,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { useSound } from "@/components/sound/SoundProvider";
 
 import { KineticText } from "@/components/ui/KineticText";
+import { FlyingText } from "@/components/ui/FlyingText";
 import { NeuralNetworkBackground } from "@/components/three/NeuralNetworkBackground";
 
 export function Vision() {
@@ -42,9 +43,9 @@ export function Vision() {
       <div className="relative z-10 max-w-4xl px-4 text-center">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
           <Reveal>
-            <div className="font-brand text-5xl md:text-7xl leading-none text-white text-left">
-              FUTURE <br/> 
-              <span className="text-neon-purple"><KineticText text="READY" /></span>
+            <div className="font-brand text-5xl md:text-7xl leading-none text-white text-left overflow-visible">
+              <FlyingText text="FUTURE" delay={0.1} /> <br/> 
+              <span className="text-neon-purple block mt-2"><FlyingText text="READY" delay={0.5} /></span>
             </div>
           </Reveal>
           

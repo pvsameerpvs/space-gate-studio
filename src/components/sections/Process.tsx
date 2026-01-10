@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react";
 import { Reveal } from "@/components/motion/Reveal";
 import { Card, CardContent } from "@/components/ui/card";
 import { useSound } from "@/components/sound/SoundProvider";
+import { FlyingText } from "@/components/ui/FlyingText";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
@@ -50,8 +51,12 @@ export function Process() {
     <section id="process" className="relative py-20">
       <div className="mx-auto max-w-6xl px-4">
         <Reveal>
-          <div className="font-mono text-xs tracking-[0.35em] text-white/60">PROCESS</div>
-          <h2 className="mt-3 font-brand text-4xl sm:text-5xl">A timeline that ships.</h2>
+          <div className="font-mono text-xs tracking-[0.35em] text-white/60 overflow-hidden">
+            <FlyingText text="PROCESS" />
+          </div>
+          <h2 className="mt-3 font-brand text-4xl sm:text-5xl overflow-visible">
+            <FlyingText text="A timeline that ships." delay={0.2} />
+          </h2>
           <p className="mt-4 max-w-2xl font-ui text-white/75">
             Scroll-triggered, cinematic, and engineered—because the process should feel as premium as the result.
           </p>

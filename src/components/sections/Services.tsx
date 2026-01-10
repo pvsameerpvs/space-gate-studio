@@ -7,6 +7,7 @@ import { useSound } from "@/components/sound/SoundProvider";
 import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
 import { Smartphone, Monitor, BrainCircuit, Zap, ArrowRight } from "lucide-react";
 import { KineticText } from "@/components/ui/KineticText";
+import { FlyingText } from "@/components/ui/FlyingText";
 
 const services = [
   {
@@ -75,10 +76,10 @@ export function Services() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-cyan opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-neon-cyan"></span>
                 </span>
-                SYSTEMS ONLINE
+                <FlyingText text="SYSTEMS ONLINE" />
               </div>
-              <h2 className="font-brand text-5xl md:text-6xl text-white">
-                Capabilities
+              <h2 className="font-brand text-5xl md:text-6xl text-white overflow-visible">
+                <FlyingText text="Capabilities" delay={0.2} />
               </h2>
             </div>
             <p className="max-w-md text-right font-mono text-xs text-white/50 tracking-widest hidden md:block">

@@ -7,14 +7,14 @@ import * as THREE from "three";
 function Network() {
   const pointsRef = useRef<THREE.Points>(null);
   const linesRef = useRef<THREE.LineSegments>(null);
+  const groupRef = useRef<THREE.Group>(null);
 
-  const count = 50;
-  const radius = 4;
+  const count = 70; // Increased count
+  const radius = 5;
 
   const [positions, indices] = useMemo(() => {
     const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
-        // Random positions within a sphere
         const r = radius * Math.cbrt(Math.random());
         const theta = Math.random() * 2 * Math.PI;
         const phi = Math.acos(2 * Math.random() - 1);
@@ -24,32 +24,34 @@ function Network() {
         pos[i * 3 + 2] = r * Math.cos(phi);
     }
     
-    // Create random connections (indices)
-    // Connecting each point to 2 random others
+    // Create connections based on distance
     const ind: number[] = [];
     for (let i = 0; i < count; i++) {
-        const target1 = Math.floor(Math.random() * count);
-        const target2 = Math.floor(Math.random() * count);
-        ind.push(i, target1);
-        ind.push(i, target2);
+        for (let j = i + 1; j < count; j++) {
+            const dx = pos[i * 3] - pos[j * 3];
+            const dy = pos[i * 3 + 1] - pos[j * 3 + 1];
+            const dz = pos[i * 3 + 2] - pos[j * 3 + 2];
+            const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+
+            if (dist < 2.5) { // Only connect if close enough
+                ind.push(i, j);
+            }
+        }
     }
 
     return [pos, new Uint16Array(ind)];
   }, []);
 
   useFrame((state) => {
-    if (pointsRef.current && linesRef.current) {
-        const time = state.clock.getElapsedTime();
-        // Rotate the network
-        pointsRef.current.rotation.y = time * 0.05;
-        linesRef.current.rotation.y = time * 0.05;
-        pointsRef.current.rotation.x = Math.sin(time * 0.1) * 0.1;
-        linesRef.current.rotation.x = Math.sin(time * 0.1) * 0.1;
+    const time = state.clock.getElapsedTime();
+    if (groupRef.current) {
+        groupRef.current.rotation.y = time * 0.05;
+        groupRef.current.rotation.x = Math.sin(time * 0.1) * 0.05;
     }
   });
 
   return (
-    <group>
+    <group ref={groupRef}>
       <points ref={pointsRef}>
         <bufferGeometry>
           <bufferAttribute
